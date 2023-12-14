@@ -4,8 +4,8 @@ exports.stars_get_all = (req, res, next) => {
   Star.find()
     .then(result =>
       res.status(200).json({
-        wiadomosc: 'Stars registered in our dictionary',
-        info: result,
+        message: 'Stars registered in our dictionary',
+        data: result,
       })
     )
     .catch(err => res.status(500).json(err));
@@ -30,8 +30,8 @@ exports.stars_add_new = (req, res, next) => {
     .save()
     .then(result => {
       res.status(200).json({
-        wiadomosc: 'Successfully added new star - ' + result.name,
-        info: result,
+        message: 'Successfully added new star - ' + result.name,
+        data: result,
       });
     })
     .catch(err => res.status(500).json(err));
@@ -42,8 +42,8 @@ exports.stars_get_by_id = (req, res, next) => {
   Star.findById(id)
     .then(result =>
       res.status(200).json({
-        wiadomosc: 'Data about ' + result.name,
-        info: result,
+        message: 'Data about ' + result.name,
+        data: result,
       })
     )
     .catch(err => res.status(500).json(err));
@@ -69,8 +69,8 @@ exports.stars_put_by_id = (req, res, next) => {
   Star.findByIdAndUpdate(id, newStar)
     .then(() => {
       res.status(200).json({
-        wiadomosc: 'Data successfully updated for star with id: ' + id,
-        result: newStar
+        message: 'Data successfully updated for star with id: ' + id,
+        data: newStar
       });
     })
     .catch(err => res.status(500).json(err));
@@ -81,7 +81,7 @@ exports.star_delete_by_id = (req, res, next) => {
   Star.findByIdAndRemove(id)
     .then(() =>
       res.status(200).json({
-        wiadomosc: 'Successfully removed star with id: ' + id,
+        message: 'Successfully removed star with id: ' + id,
       })
     )
     .catch(err => res.status(500).json(err));

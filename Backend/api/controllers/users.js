@@ -19,7 +19,7 @@ exports.user_sign_in = async (req, res, next) => {
     const result = await user.save();
     res.status(200).json({
       message: 'New user added successfully',
-      info: result,
+      data: result,
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -37,7 +37,7 @@ exports.user_log_in = (req, res, next) => {
         const token = jwt.sign({ email: user.email }, process.env.JWT_KEY, {
           expiresIn: '1h',
         });
-        return res.status(200).json({ wiadomosc: token });
+        return res.status(200).json({ data: token });
       });
     })
     .catch(err => {
