@@ -65,6 +65,20 @@ const StarForm = ({ onSubmit, starToEdit }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const formatLabel = key => {
+    return key
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, str => str.toUpperCase());
+  };
+
+  const getInputType = key => {
+    if (['mass', 'radius', 'temperature', 'luminosity', 'age', 'distanceFromEarth', 'discoveryYear'].includes(key)) {
+      return 'number';
+    } else {
+      return 'text';
+    }
+  };
+
   const handleSubmit = async e => {
     e.preventDefault();
     const data = new FormData();
@@ -97,10 +111,10 @@ const StarForm = ({ onSubmit, starToEdit }) => {
               {Object.keys(formData).map(key => (
                 <div key={key} className="mb-3">
                   <label htmlFor={key} className="form-label text-white">
-                    {key.charAt(0).toUpperCase() + key.slice(1)}:
+                    {formatLabel(key)}:
                   </label>
                   <input
-                    type={key === 'email' ? 'email' : 'text'}
+                    type={getInputType(key)}
                     id={key}
                     name={key}
                     className="form-control"
@@ -114,7 +128,7 @@ const StarForm = ({ onSubmit, starToEdit }) => {
                   />
                 </div>
               ))}
-
+  
               <div className="mb-3">
                 <label htmlFor="starImage" className="form-label text-white">
                   Star Image:
@@ -128,7 +142,7 @@ const StarForm = ({ onSubmit, starToEdit }) => {
                   required
                 />
               </div>
-
+  
               <div className="text-center">
                 <button type="submit" className="btn btn-primary">
                   {params.id || starToEdit ? 'Update Star' : 'Add Star'}
@@ -139,7 +153,7 @@ const StarForm = ({ onSubmit, starToEdit }) => {
         </div>
       </div>
     </div>
-  );
+  );  
 };
 
 export default StarForm;
