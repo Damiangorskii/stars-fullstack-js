@@ -1,8 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import api from '../../services/api';
 
-const StarDetail = ({ star }) => {
+const StarDetail = () => {
+  const [star, setStar] = useState(null);
+  const params = useParams();
+
+  useEffect(() => {
+    const fetchStarData = async () => {
+      try {
+        const response = await api.getStar(params.id);
+        console.log('Successfully retrieved star', response);
+        setStar(response);
+      } catch (error) {
+        console.error('Failed to fetch star details', error);
+      }
+    };
+
+    fetchStarData();
+  }, [params.id]);
+
   if (!star) {
-    return <p>No star details available.</p>;
+    return <p>Loading star details...</p>;
   }
 
   return (

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import api from '../../services/api';
 
 const StarForm = ({ onSubmit, starToEdit }) => {
   const [formData, setFormData] = useState({
@@ -15,6 +17,35 @@ const StarForm = ({ onSubmit, starToEdit }) => {
     discoveryYear: '',
     notes: '',
   });
+  const params = useParams();
+
+  useEffect(() => {
+    if (params.id) {
+      const fetchStarData = async () => {
+        try {
+          const response = await api.getStar(params.id);
+          setFormData({
+            name: response.name || '',
+            type: response.type || '',
+            mass: response.mass || 0,
+            radius: response.radius || 0,
+            temperature: response.temperature || 0,
+            luminosity: response.luminosity || 0,
+            age: response.age || 0,
+            distanceFromEarth: response.distanceFromEarth || 0,
+            constellation: response.constellation || '',
+            discoveredBy: response.discoveredBy || 'Unknown',
+            discoveryYear: response.discoveryYear || '',
+            notes: response.notes || '',
+          });
+        } catch (error) {
+          console.error('Failed to fetch star data', error);
+        }
+      };
+
+      fetchStarData();
+    }
+  }, [params.id]);
 
   useEffect(() => {
     if (starToEdit) {
@@ -28,12 +59,12 @@ const StarForm = ({ onSubmit, starToEdit }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    onSubmit(formData);
+    onSubmit(formData, params.id);
   };
 
   return (
     <div>
-      <h2>{starToEdit ? 'Edit Star' : 'Add Star'}</h2>
+      <h2>{params.id || starToEdit ? 'Edit Star' : 'Add Star'}</h2>
       <form onSubmit={handleSubmit}>
         <label>Name:</label>
         <input
@@ -140,7 +171,7 @@ const StarForm = ({ onSubmit, starToEdit }) => {
           onChange={handleChange}
         />
         <br />
-        <button type="submit">{starToEdit ? 'Update Star' : 'Add Star'}</button>
+        <button type="submit">{params.id || starToEdit ? 'Update Star' : 'Add Star'}</button>
       </form>
     </div>
   );

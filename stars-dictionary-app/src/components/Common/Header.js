@@ -1,7 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../auth/AuthContext';
 
 const Header = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   return (
     <header>
       <h1>Stars Dictionary App</h1>
@@ -11,6 +20,8 @@ const Header = () => {
             <Link to="/">Home</Link>
           </li>
         </ul>
+        {user && <p>Zalogowany jako: {user.email}</p>}
+        {user && <button onClick={handleLogout}>Wyloguj</button>}
       </nav>
     </header>
   );

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import apiService from '../../services/api';
+import { useAuth } from '../../auth/AuthContext';
+import api from '../../services/api';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = e => {
@@ -14,10 +16,10 @@ const Login = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const token = await apiService.login(formData);
-      localStorage.setItem('userToken', token);
-      console.log('Logged in successfully!');
-      navigate.push('/stars');
+      const token = await api.login(formData);
+      console.log('Logged in successfully!', token);
+      login(formData.email, token);
+      navigate('/');
     } catch (error) {
       setError('Invalid email or password. Please try again.');
     }

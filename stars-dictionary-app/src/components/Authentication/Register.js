@@ -15,16 +15,16 @@ const Register = () => {
   };
 
   const handleSuccessfulRegistration = token => {
-    localStorage.setItem('userToken', token);
-    navigate.push('/stars');
+    console.log('Successfully registrated! ', token);
+    navigate('/login');
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
     try {
       const response = await api.register(formData);
-      if (response.token) {
-        handleSuccessfulRegistration(response.token);
+      if (response) {
+        handleSuccessfulRegistration(response);
       } else {
         setError('Registration failed. Please try again.');
       }
