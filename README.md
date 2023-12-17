@@ -32,6 +32,7 @@ The backend follows a modular structure, with key components:
 1. Install dependencies: `npm install`
 2. Start the server: `nodemon server.js`
 3. Access the API at `http://localhost:8080`
+4. Make sure you have created `uploads` catalogue inside `Backend` catalogue
 
 ## Frontend Stack
 
