@@ -14,6 +14,7 @@ exports.stars_get_all = (req, res, next) => {
 exports.stars_add_new = (req, res, next) => {
   const star = new Star({
     name: req.body.name,
+    starImage: req.file.path,
     type: req.body.type,
     mass: req.body.mass,
     radius: req.body.radius,
@@ -53,6 +54,7 @@ exports.stars_put_by_id = (req, res, next) => {
   const id = req.params.starId;
   const newStar = {
     name: req.body.name,
+    starImage: req.file.path,
     type: req.body.type,
     mass: req.body.mass,
     radius: req.body.radius,

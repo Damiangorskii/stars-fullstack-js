@@ -39,3 +39,5 @@ jspm_packages/
 # Optional: Docker Compose file
 docker-compose.yml
 docker-compose.override.yml
+
+uploads
