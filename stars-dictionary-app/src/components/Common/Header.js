@@ -12,16 +12,47 @@ const Header = () => {
   };
 
   return (
-    <header>
-      <h1>Stars Dictionary App</h1>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-        </ul>
-        {user && <p>Zalogowany jako: {user.email}</p>}
-        {user && <button onClick={handleLogout}>Wyloguj</button>}
+    <header className="bg-dark text-white py-3">
+      <nav className="navbar navbar-expand navbar-dark">
+        <div className="container-fluid">
+          <div className="d-flex align-items-center">
+            <Link className="navbar-brand me-3" to="/">
+              Stars Dictionary
+            </Link>
+            {user && (
+              <Link
+                to="/add-star"
+                className="btn btn-outline-light btn-sm me-2"
+              >
+                Add new star
+              </Link>
+            )}
+          </div>
+          <div className="ms-auto">
+            {user ? (
+              <>
+                <span className="navbar-text me-2">
+                  Logged as: {user.email}
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="btn btn-outline-light btn-sm"
+                >
+                  Log out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="btn btn-outline-light btn-sm me-2">
+                  Log in
+                </Link>
+                <Link to="/register" className="btn btn-outline-light btn-sm">
+                  Register
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
       </nav>
     </header>
   );

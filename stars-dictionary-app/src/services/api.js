@@ -12,9 +12,6 @@ const setAuthToken = token => {
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
 
 const apiService = {
@@ -63,7 +60,7 @@ const apiService = {
       if (token) {
         setAuthToken(token);
       }
-      const response = await api.post('/stars', starData);
+      const response = await api.post('/stars', starData, {});
       return response.data.data;
     } catch (error) {
       throw error;
@@ -76,7 +73,7 @@ const apiService = {
       if (token) {
         setAuthToken(token);
       }
-      const response = await api.put(`/stars/${starId}`, starData);
+      const response = await api.put(`/stars/${starId}`, starData, {});
       return response.data;
     } catch (error) {
       throw error;

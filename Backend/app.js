@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 
@@ -21,6 +22,8 @@ app.use('/users', userRoutes);
 
 const starRoutes = require('./api/routes/stars');
 app.use('/stars', starRoutes);
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use((req, res, next) => {
   res.status(404).json({ wiadomosc: 'Not found ' });

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 
 const StarForm = ({ onSubmit, starToEdit }) => {
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     type: '',
@@ -17,7 +19,9 @@ const StarForm = ({ onSubmit, starToEdit }) => {
     discoveryYear: '',
     notes: '',
   });
+  const [starImage, setStarImage] = useState(null);
   const params = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (params.id) {
@@ -53,126 +57,87 @@ const StarForm = ({ onSubmit, starToEdit }) => {
     }
   }, [starToEdit]);
 
+  const handleFileChange = e => {
+    setStarImage(e.target.files[0]);
+  };
+
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    onSubmit(formData, params.id);
+    const data = new FormData();
+    Object.keys(formData).forEach(key => {
+      data.append(key, formData[key]);
+    });
+
+    if (starImage) {
+      data.append('starImage', starImage);
+    }
+
+    const result = await onSubmit(data, params.id);
+    if (result.success) {
+      navigate('/');
+    } else {
+      setError('Error occurred');
+    }
   };
 
   return (
-    <div>
-      <h2>{params.id || starToEdit ? 'Edit Star' : 'Add Star'}</h2>
-      <form onSubmit={handleSubmit}>
-        <label>Name:</label>
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <label>Type:</label>
-        <input
-          type="text"
-          name="type"
-          value={formData.type}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <label>Mass:</label>
-        <input
-          type="number"
-          name="mass"
-          value={formData.mass}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <label>Radius:</label>
-        <input
-          type="number"
-          name="radius"
-          value={formData.radius}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <label>Temperature:</label>
-        <input
-          type="number"
-          name="temperature"
-          value={formData.temperature}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <label>Luminosity:</label>
-        <input
-          type="number"
-          name="luminosity"
-          value={formData.luminosity}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <label>Age:</label>
-        <input
-          type="number"
-          name="age"
-          value={formData.age}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <label>Distane from Earth:</label>
-        <input
-          type="number"
-          name="distanceFromEarth"
-          value={formData.distanceFromEarth}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <label>Constellation:</label>
-        <input
-          type="text"
-          name="constellation"
-          value={formData.constellation}
-          onChange={handleChange}
-          required
-        />
-        <br />
-        <label>Discovered by:</label>
-        <input
-          type="text"
-          name="discoveredBy"
-          value={formData.discoveredBy}
-          onChange={handleChange}
-        />
-        <br />
-        <label>Discovery year:</label>
-        <input
-          type="number"
-          name="discoveryYear"
-          value={formData.discoveryYear}
-          onChange={handleChange}
-        />
-        <br />
-        <label>Notes:</label>
-        <input
-          type="text"
-          name="notes"
-          value={formData.notes}
-          onChange={handleChange}
-        />
-        <br />
-        <button type="submit">{params.id || starToEdit ? 'Update Star' : 'Add Star'}</button>
-      </form>
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-lg-6 col-md-8">
+          <h2 className="text-white mb-4 text-center">
+            {params.id || starToEdit ? 'Edit Star' : 'Add Star'}
+          </h2>
+          <div className="card bg-dark p-4 rounded">
+            {error && <div className="alert alert-danger">{error}</div>}
+            <form onSubmit={handleSubmit}>
+              {Object.keys(formData).map(key => (
+                <div key={key} className="mb-3">
+                  <label htmlFor={key} className="form-label text-white">
+                    {key.charAt(0).toUpperCase() + key.slice(1)}:
+                  </label>
+                  <input
+                    type={key === 'email' ? 'email' : 'text'}
+                    id={key}
+                    name={key}
+                    className="form-control"
+                    value={formData[key]}
+                    onChange={handleChange}
+                    required={
+                      key !== 'notes' &&
+                      key !== 'discoveredBy' &&
+                      key !== 'discoveryYear'
+                    }
+                  />
+                </div>
+              ))}
+
+              <div className="mb-3">
+                <label htmlFor="starImage" className="form-label text-white">
+                  Star Image:
+                </label>
+                <input
+                  type="file"
+                  id="starImage"
+                  name="starImage"
+                  className="form-control"
+                  onChange={handleFileChange}
+                  required
+                />
+              </div>
+
+              <div className="text-center">
+                <button type="submit" className="btn btn-primary">
+                  {params.id || starToEdit ? 'Update Star' : 'Add Star'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

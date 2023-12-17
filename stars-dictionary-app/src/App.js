@@ -8,6 +8,8 @@ import StarList from './components/Stars/StarList';
 import StarDetail from './components/Stars/StarDetail';
 import StarForm from './components/Stars/StarForm';
 import api from './services/api';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.css';
 
 const App = () => {
   const handleSubmit = async (formData, id) => {
@@ -20,8 +22,10 @@ const App = () => {
         response = await api.addStar(formData);
         console.log('Successfully added new star', response);
       }
+      return { success: true, data: response };
     } catch (error) {
       console.error('Operation failed', error);
+      return { success: false, error };
     }
   };
 
