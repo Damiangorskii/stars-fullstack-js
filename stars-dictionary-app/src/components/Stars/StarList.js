@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import api from '../../services/api';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const StarList = () => {
   const [stars, setStars] = useState([]);

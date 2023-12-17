@@ -1,6 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { AuthProvider } from './auth/AuthContext';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { useAuth } from './auth/AuthContext';
 import Login from './components/Authentication/Login';
 import Register from './components/Authentication/Register';
 import Header from './components/Common/Header';
@@ -12,6 +12,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 
 const App = () => {
+  const { user } = useAuth();
+  console.log('elo', user);
   const handleSubmit = async (formData, id) => {
     try {
       let response;
@@ -30,7 +32,6 @@ const App = () => {
   };
 
   return (
-    <AuthProvider>
       <Router>
         <Header />
         <Routes>
@@ -40,15 +41,14 @@ const App = () => {
           <Route path="/stars/:id" element={<StarDetail />} />
           <Route
             path="/add-star"
-            element={<StarForm onSubmit={handleSubmit} />}
+            element={ user ? <StarForm onSubmit={handleSubmit} /> : <Navigate to="/login" />}
           />
           <Route
             path="/edit-star/:id"
-            element={<StarForm onSubmit={handleSubmit} />}
+            element={ user ? <StarForm onSubmit={handleSubmit} /> : <Navigate to="/login" />}
           />
         </Routes>
       </Router>
-    </AuthProvider>
   );
 };
 
